@@ -3,6 +3,7 @@
 import sqlite3
 import optparse
 import os
+import sys, codecs, locale
 
 
 def printProfile(skypeDB):
@@ -12,65 +13,58 @@ def printProfile(skypeDB):
       datetime(profile_timestamp,'unixepoch') FROM Accounts;")
 
     for row in c:
-        print '[*] -- Found Account --'
-        print '[+] User           : '+str(row[0])
-        print '[+] Skype Username : '+str(row[1])
-        print '[+] Location       : '+str(row[2])+','+str(row[3])
-        print '[+] Profile Date   : '+str(row[4])
+        print 'Found Account'
+        print 'User           : %s ' % (row[0],)
+        print 'Skype Username : %s ' % (row[1],)
+        print 'Location       : %s %s' % (row[2], row[3],)
+        print 'Profile Date   : %s ' % (row[4],)
 
 
 def printContacts(skypeDB):
     conn = sqlite3.connect(skypeDB)
     c = conn.cursor()
     c.execute("SELECT displayname, skypename, city, country,\
-      phone_mobile, birthday FROM Contacts;")
+      phone_mobile, birthday FROM Contacts ORDER BY skypename;")
 
     for row in c:
         print '\n[*] -- Found Contact --'
-        print '[+] User           : ' + str(row[0])
-        print '[+] Skype Username : ' + str(row[1])
-
-        if str(row[2]) != '' and str(row[2]) != 'None':
-            print '[+] Location       : ' + str(row[2]) + ',' \
-                + str(row[3])
-        if str(row[4]) != 'None':
-            print '[+] Mobile Number  : ' + str(row[4])
-        if str(row[5]) != 'None':
-            print '[+] Birthday       : ' + str(row[5])
+        print (u'[+] User           : %s ' % (row[0],)).encode('utf-8')
+        print '[+] Skype Username : %s ' % (row[1],)
+        if (row[2]) != '' and (row[2]) != 'None':
+            print '[+] Location       : %s %s ' % (row[2], row[3],)
+        if (row[4]) != 'None':
+            print '[+] Mobile Number  :  %s ' % (row[4],)
+        if (row[5]) != 'None':
+            print '[+] Birthday       : %s ' % (row[5])
 
 
 def printCallLog(skypeDB):
     conn = sqlite3.connect(skypeDB)
     c = conn.cursor()
-    c.execute("SELECT datetime(begin_timestamp,'unixepoch'), \
-      identity FROM calls, conversations WHERE \
+    c.execute("SELECT datetime(begin_timestamp,'unixepoch'), identity FROM calls, conversations WHERE \
       calls.conv_dbid = conversations.id;"
               )
     print '\n[*] -- Found Calls --'
 
     for row in c:
-        print '[+] Time: '+str(row[0])+\
-          ' | Partner: '+ str(row[1])
+        print '[+] Time: %s ' % (row[0])+\
+          ' | Partner: %s ' % (row[1])
 
 
 def printMessages(skypeDB):
     conn = sqlite3.connect(skypeDB)
     c = conn.cursor()
-    c.execute("SELECT datetime(timestamp,'unixepoch'), \
-              dialog_partner, author, body_xml FROM Messages;")
+    c.execute("SELECT datetime(timestamp,'unixepoch'), dialog_partner, author, body_xml FROM Messages;")
     print '\n[*] -- Found Messages --'
 
     for row in c:
-        try:
-            if 'partlist' not in str(row[3]):
-                if str(row[1]) != str(row[2]):
-                    msgDirection = 'To ' + str(row[1]) + ': '
+            if 'partlist' not in (row[3]):
+                if (row[1]) != (row[2]):
+                    msgDirection = 'To %s :' % (row[1]) 
                 else:
-                    msgDirection = 'From ' + str(row[2]) + ' : '
-                print 'Time: ' + str(row[0]) + ' ' \
-                    + msgDirection + str(row[3])
-        except:
-            pass
+                    msgDirection = 'From %s :' % (row[2]) 
+                print 'Time: %s %s' % (row[0], row[3]) 
+      
 
 
 def main():
