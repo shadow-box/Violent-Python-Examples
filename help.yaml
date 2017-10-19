@@ -1,0 +1,13 @@
+---
+command: help
+  usage: help [command]
+  description: >
+    Prints all usable commands, or prints the info page for a specific command.
+    
+---
+command: exit
+  usage: exit
+  description: >
+    Exits the console.
+---
+
