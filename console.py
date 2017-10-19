@@ -26,8 +26,5 @@ class Console(cmd.Cmd):
     def emptyline(self):
         pass
     
-    
-         
 if __name__ == '__main__':
-    prompt.prompt = '> '
     Console().cmdloop('Welcome to ')
