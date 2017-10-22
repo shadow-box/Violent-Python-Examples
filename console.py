@@ -1,4 +1,5 @@
 import cmd, sys, os
+import optparse
 
 #
 #Place imports for functions here. Call them in the do_ functions
