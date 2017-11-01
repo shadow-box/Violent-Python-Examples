@@ -12,19 +12,27 @@ from selenium.webdriver.support import expected_conditions as EC
 
 def login():
     driver = webdriver.Firefox()
-    driver.get("https://www.facebook.comp")
+    driver.get("https://www.facebook.com")
     #assert "Python" in driver.title
     email = driver.find_element_by_id("email")
     password = driver.find_element_by_id("pass")
     email.clear
     password.clear
-    email.send_keys("username")
-    password.send_keys("password", Keys.RETURN)
+    email.send_keys("user@email.com")
+    password.send_keys("p@ssw0rd", Keys.RETURN)
     sleep(5)
     assert "No results found." not in driver.page_source
     return driver
    
 driver = login()
+
+load_count = 0
+while load_count < 0:
+    print("Do stuff")
+
+friends = soup.findAll("div", {"class" : "fsl fwb fcb }) ## Builds list of friends
+                               
+                            
 
 #soup = BeautifulSoup(str(driver.page_source), "lxml")#set up bs4 object from robo browser page content
 #load_tweets(soup)
